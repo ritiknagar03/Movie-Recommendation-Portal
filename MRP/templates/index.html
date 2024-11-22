@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MRP: Movie Recommendation Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-900 text-gray-300">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 text-white py-4 shadow-md">
+      <h1 class="text-center text-2xl font-bold px-2">
+        MRP: Movie Recommendation Project
+      </h1>
+    </nav>
+
+    <!-- Alert Messages -->
+    {% if message %}
+    <div class="max-w-4xl mx-auto mt-6">
+      <div
+        class="bg-red-600 text-white border border-red-700 rounded px-4 py-3"
+      >
+        {{ message }}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Form -->
+    <form
+      method="POST"
+      class="mx-auto bg-gray-800 shadow-lg rounded px-8 py-6 mt-8 flex flex-col md:flex-row items-center justify-center gap-6"
+    >
+      {% csrf_token %}
+      <div class="w-[320px] m-3">
+        <img
+          src="https://external-preview.redd.it/tWkYFRTFlq1fwO9BmAdtXVIQas1Hljzsl3iyZFGSNhg.jpg?width=640&crop=smart&auto=webp&s=9abdf1392c1eb187b1182b47cf678c78382c59dc"
+        />
+      </div>
+      <div class="w-[320px] border-red-500 border rounded-lg p-2">
+        <div class="mb-4">
+          <label class="block text-gray-400 text-sm font-bold mb-2"
+            >GENRE</label
+          >
+          <select
+            name="Genre"
+            id="Genre"
+            class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option selected>Choose...</option>
+            <option value="comedy">Comedy</option>
+            <option value="drama">Drama</option>
+            <option value="action">Action</option>
+            <option value="crime">Crime</option>
+            <option value="biography">Biography</option>
+            <option value="adventure">Adventure</option>
+            <option value="sci-Fi">Sci-Fi</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="horror">Horror</option>
+            <option value="romance">Romance</option>
+            <option value="war">War</option>
+            <option value="mystery">Mystery</option>
+            <option value="thriller">Thriller</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-400 text-sm font-bold mb-2"
+            >CERTIFICATE</label
+          >
+          <select
+            name="certificate"
+            id="certificate"
+            class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option selected>Choose...</option>
+            <option value="a">A</option>
+            <option value="ua">UA</option>
+            <option value="u">U</option>
+            <option value="pg">PG</option>
+            <option value="r">R</option>
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-400 text-sm font-bold mb-2"
+            >IMDB RATING</label
+          >
+          <select
+            name="rating"
+            id="rating"
+            class="w-full px-3 py-2 bg-gray-700 text-gray-300 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option selected>Choose...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition duration-200"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <!-- Recommendations Section -->
+    {% if recommendations %}
+    <h3 class="text-center text-xl font-bold mt-8 text-white">
+      Top 6 Recommendations:
+    </h3>
+    <div class="flex flex-wrap justify-center gap-6 mt-6 pb-10">
+      {% for movie in recommendations %}
+      <div
+        class="relative bg-gray-800 text-white rounded-lg shadow-lg max-w-sm overflow-hidden"
+      >
+        <!-- Movie Poster -->
+        <div class="relative">
+          <img
+            src="{{ movie.Poster_Link }}"
+            alt="{{ movie.Series_Title }} poster"
+            class="w-full h-64 object-cover"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"
+          ></div>
+        </div>
+        <!-- Movie Details -->
+        <div class="p-4">
+          <h5 class="text-xl font-bold mb-2 truncate">
+            {{ movie.Series_Title }}
+          </h5>
+          <p class="text-sm text-gray-400 mb-4">{{ movie.Overview }}</p>
+          <div class="flex flex-col space-y-2 text-sm">
+            <p>
+              <span class="font-semibold">Runtime:</span> {{ movie.Runtime }}
+            </p>
+            <p>
+              <span class="font-semibold">Director:</span> {{ movie.Director }}
+            </p>
+            <p>
+              <span class="font-semibold">Cast:</span>
+              <span class="truncate"
+                >{{ movie.Star1 }}, {{ movie.Star2 }}, {{ movie.Star3 }}, {{
+                movie.Star4 }}</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="max-w-4xl mx-auto mt-6">
+      <div
+        class="bg-gray-700 text-gray-300 border border-gray-600 rounded px-4 py-3"
+      >
+        No recommendations available.
+      </div>
+    </div>
+    {% endif %}
+  </body>
+</html>
